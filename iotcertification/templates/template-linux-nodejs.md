@@ -1,10 +1,10 @@
 ---
-platform: {enter the OS name running on device}
-device: {enter your device name here}
+platform: Custom Linux
+device: Leez P515
 language: javascript
 ---
 
-Run a simple JavaScript sample on {enter your device name here} device running {enter the OS name running on device}
+Run a simple JavaScript sample on Leez P515 device running Custom Linux
 ===
 ---
 
@@ -16,19 +16,12 @@ Run a simple JavaScript sample on {enter your device name here} device running {
 -   [Step 3: Build and Run the Sample](#Build)
 -   [Next Steps](#NextSteps)
 
-# Instructions for using this template
-
--   Replace the text in {placeholders} with correct values.
--   Delete the lines {{enclosed}} after following the instructions enclosed between them.
--   It is advisable to use external links, wherever possible.
--   Remove this section from final document.
-
 <a name="Introduction"></a>
 # Introduction
 
 **About this document**
 
-This document describes how to connect {enter your device name here} device running {enter the OS name running on device} with Azure IoT SDK. This multi-step process includes:
+This document describes how to connect Leez P515 device running Custom Linux with Azure IoT SDK. This multi-step process includes:
 -   Configuring Azure IoT Hub
 -   Registering your IoT device
 -   Build and deploy Azure IoT SDK on device
@@ -38,17 +31,14 @@ This document describes how to connect {enter your device name here} device runn
 
 You should have the following items ready before beginning the process:
 
--   [Prepare your development environment][setup-devbox-linux]
--   [Setup your IoT hub][lnk-setup-iot-hub]
--   [Provision your device and get its credentials][lnk-manage-iot-hub]
--   Computer with Git client installed 
--   {enter your device name here} device.
--   {{Please specify if any other software(s) or hardware(s) are required.}}
+-   You should have Leez P515 (http://leez.lenovo.com)
+-   Setup your IoT hub
+-   Provision your device and get its credentials
 
 <a name="PrepareDevice"></a>
 # Step 2: Prepare your Device
 
--   {{Write down the instructions required to setup, configure and connect your device. Please use external links when possible pointing to your own page with device preparation steps.}}
+-   Preparing the Leez P515 board
 
 <a name="Build"></a>
 # Step 3: Build and Run the Sample
@@ -58,84 +48,24 @@ You should have the following items ready before beginning the process:
 
 -   Open a PuTTY session and connect to the device.
 
--   Choose your commands in next steps based on the OS running on your device.
+-   Then on device：
 
--   Run following command to check if NodeJS is already installed
+        Get the latest version node.js (https://nodejs.org/dist/v10.15.3/node-v10.15.3-linux-armv7l.tar.xz)
+		Create node symbol link to /usr/bin/node
+		Create npm symbol link to /usr/bin/npm
+		cd ~
+		git clone   https://github.com/Azure/azure-iot-sdk-node.git
+		
+		npm install -g azure-cli
 
-        node --version
-
-    If version is **0.12.x or greater**, then skip next step of installing prerequisite packages. Else uninstall it by issuing following command from command line on the device.{{***Keep the command set based on your OS and remove the rest.***}}
-
-    {{**Debian or Ubuntu**}}
-
-        sudo apt-get remove nodejs
-
-    {{**Fedora**}}
-
-        sudo dnf remove nodejs
-
-    {{**Any Other Linux OS**}}
-
-        Use equivalent commands on the target OS
-
--   Install the prerequisite packages by issuing the following commands from the command line on the device. Choose your commands based on the OS running on your device.{{***Keep the command set based on your OS and remove the rest.***}}
-
-    {{**Debian or Ubuntu**}}
-
-        curl -sL https://deb.nodesource.com/setup_4.x | sudo bash -
-
-        sudo apt-get install -y nodejs
-
-    {{**Fedora**}}
-
-        wget http://nodejs.org/dist/v4.2.1/node-v4.2.1-linux-x64.tar.gz
-
-        tar xvf node-v4.2.1-linux-x64.tar.gz
-
-        sudo mv node-v4.2.1-linux-x64 /opt
-
-        echo "export PATH=\$PATH:/opt/node-v4.2.1-linux-x64/bin" >> ~/.bashrc
-
-        source ~/.bashrc
-
-    {{**Any Other Linux OS**}}
-
-        Use equivalent commands on the target OS
-
-     {{***If any other software is required, please specify here the command(s) for installing same.***}}
-     
-    **Note:** To test successful installation of Node JS, try to fetch its version information by running following command:
-
-        node --version
-
--   Download the SDK to the board by issuing the following command in
-    PuTTY:
-
-        git clone --recursive https://github.com/Azure/azure-iot-sdk-node.git
-
--   Verify that you now have a copy of the source code under the directory ~/azure-iot-sdk-node.
 
 <a name="BuildSamples"></a>
 ## 3.2 Build the samples
 
--   To validate the source code run the following commands on the device.
-
-        export IOTHUB_CONNECTION_STRING='<iothub_connection_string>'
-
-    Replace the `<iothub_connection_string>` placeholder with IoTHub Connection String you got in [Step 1](#Prerequisites).    
-
--   Run the following commands 
-
-        cd ~/azure-iot-sdk-node
-        build/dev-setup.sh
-        build/build.sh | tee LogFile.txt
-
-    ***Note:*** *LogFile.txt in above command should be replaced with a file name where build output will be written.*
-
--   Install npm package to run sample.
+-   Run following command to check
 
         cd ~/azure-iot-sdk-node/device/samples
-
+        
     **For AMQP Protocol:**
 	
         npm install azure-iot-device-amqp
@@ -150,11 +80,17 @@ You should have the following items ready before beginning the process:
 
 -   To update sample, run the following command on device.
 
-        cd ~/azure-iot-sdk-node/device/samples
-        nano simple_sample_device.js
+        npm install es5-shim
+		
+		npm install lodash
+		
+		npm install azure-iot-device
+		
+		npm link azure-iot-device
+		
+		vi simple_sample_device.js
 
--   This launches a console-based text editor. Scroll down to the
-    protocol information.
+-   This launches a console-based text editor. Scroll down to the protocol information.
     
 -   Find the below code:
 
@@ -169,30 +105,25 @@ You should have the following items ready before beginning the process:
 
         var connectionString = "[IoT Device Connection String]";
 
--   Replace the above placeholder with device connection string. You can get this from DeviceExplorer as explained in [Step 1](#Prerequisites), that you copied into Notepad.
+-   Replace the above placeholder with device connection string. You can get this from DeviceExplorer as explained in [Step 1], that you copied into Notepad.
 
--   Save your changes by pressing Ctrl+O and when nano prompts you to save it as the same file, just press ENTER.
+-   export IOTHUB_CONNECTION_STRING=[IoT Device Connection String] ,Replace the above placeholder with device connection string.
 
--   Press Ctrl+X to exit nano.
-
--   Run the following command before leaving the **~/azure-iot-sdk-node/device/samples** directory
-
-        npm link azure-iot-device
 
 <a name="Run"></a>
 ## 3.3 Run and Validate the Samples
 
 ### 3.3.1 Send Device Events to IOT Hub
 
--   Run the sample by issuing following command and verify that data has been successfully sent and received.
+-   Run the sample by issuing following command and verify that data has been successfully sent and received
 
         node ~/azure-iot-sdk-node/device/samples/simple_sample_device.js
 
--   See [Manage IoT Hub][lnk-manage-iot-hub] to learn how to observe the messages IoT Hub receives from the application.
+-   See Manage IoT Hub to learn how to observe the messages IoT Hub receives from the application.
 
 ### 3.3.2 Receive messages from IoT Hub
 
--   See [Manage IoT Hub][lnk-manage-iot-hub] to learn how to send cloud-to-device messages to the application.
+-   See Manage IoT Hub to learn how to send cloud-to-device messages to the application.
 
 
 <a name="NextSteps"></a>
